@@ -33,9 +33,7 @@ jobs:
           node-version: 14
 
       - name: Authenticate with NPM registry
-        uses: actions/npm@7
-        with:
-          args: config set "//registry.npmjs.org/:_authToken" ${{ secrets.NPM_AUTH_TOKEN }}
+        run: echo "//registry.npmjs.org/:_authToken=\${{ secrets.NPM_AUTH_TOKEN }}" > .npmrc
 
       - name: Install dependencies
         run: npm ci
