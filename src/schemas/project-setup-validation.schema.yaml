@@ -45,7 +45,4 @@ properties:
           type: string
       required:
         - path
-required:
-  - environment
-  - files
-  - dirs
+
