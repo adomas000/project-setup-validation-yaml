@@ -47,8 +47,18 @@ export interface DirFileObject {
 })
 ```
  */
-export function validateProjectDirectories(obj: DirFileObject): void {
+export function validateProjectDirectories(obj: DirFileObject, reporter?: Function): void {
   const { baseDir = process.cwd() } = obj;
+  const errors: {
+    dirs: {path: string, error: string}[],
+    files: {path: string, error: string}[]
+  } = {
+    dirs: [],
+    files: []
+  }
+  
+  const reporterType = reporter ? 'custom' : 'console'
+  reporter = reporter ?? console.error.bind(console)
 
   if (obj.dirs) {
     for (const dir of obj.dirs) {
@@ -66,13 +76,33 @@ export function validateProjectDirectories(obj: DirFileObject): void {
       }
 
       if (!fs.existsSync(dirPath)) {
-        console.error(`ERROR: Directory ${dirPath} does not exist.`);
-        process.exit(1);
+        errors.dirs.push({
+          path: dirPath,
+          error: `ERROR: Directory '${dirPath}' does not exist.`
+        });
+        // process.exit(1);
       } else if (!fs.statSync(dirPath).isDirectory()) {
-        console.error(`ERROR: ${dirPath} is not a directory.`);
-        process.exit(1);
+        errors.dirs.push({
+          path: dirPath,
+          error: `ERROR: ${dirPath} is not a directory.`
+        });
+        // process.exit(1);
       }
     }
+  }
+
+  if (errors.dirs.length) {
+    if (reporterType === 'console') {
+      reporter('"""""""""""""""""""""""""""""""""""""""""""""""""""""""')
+      errors.dirs.forEach((o) => {
+        reporter!(o.error)
+      })
+      reporter('"""""""""""""""""""""""""""""""""""""""""""""""""""""""')
+      process.exit(1);
+    } else {
+      reporter(errors.dirs)
+    }
+    return // early return, because some file paths might depend on dirs
   }
 
   if (obj.files) {
@@ -91,11 +121,32 @@ export function validateProjectDirectories(obj: DirFileObject): void {
       }
 
       if (!fs.existsSync(filePath)) {
-        console.error(`ERROR: File ${filePath} does not exist.`);
-        process.exit(1);
+        errors.files.push({
+          path: filePath,
+          error: `ERROR: File ${filePath} does not exist.`
+        });
+        // console.error(`ERROR: File ${filePath} does not exist.`);
+        // process.exit(1);
       } else if (!fs.statSync(filePath).isFile()) {
-        console.error(`ERROR: ${filePath} is not a file.`);
+        errors.files.push({
+          path: filePath,
+          error: `ERROR: ${filePath} is not a file.`
+        });
+        // console.error(`ERROR: ${filePath} is not a file.`);
+        // process.exit(1);
+      }
+    }
+
+    if (errors.files.length) {
+      if (reporterType === 'console') {
+        reporter('"""""""""""""""""""""""""""""""""""""""""""""""""""""""')
+        errors.files.forEach((o) => {
+          reporter!(o.error)
+        })
+        reporter('"""""""""""""""""""""""""""""""""""""""""""""""""""""""')
         process.exit(1);
+      } else {
+        reporter(errors.files)
       }
     }
   }

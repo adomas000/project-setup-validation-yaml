@@ -3,7 +3,7 @@ import YAML from 'yaml'
 import Ajv, { ValidateFunction } from 'ajv'
 import path from 'path'
 
-import { customEnvValidators, validateProjectEnvironment, envalidValidationTypes, validateProjectDirectories } from './validators'
+import { validateProjectEnvironment, envalidValidationTypes, validateProjectDirectories } from './validators'
 import { DirFileObject } from './validators/projectDirectoryValidator'
 
 export default function projectSetupWithYAML(projectSetupValidationYAMLPath: string) {
@@ -44,7 +44,8 @@ class ProjectSetupWithYAML {
         projectSetupValidationYAMLPath: "",
         projectSetupValidationSchema: {},
         projectSetupValidationYAMLStr: "",
-        projectSetupValidationYAMLJson: {}
+        projectSetupValidationYAMLJson: {},
+        customReporter: undefined as unknown as Function
     };
 
     constructor(projectSetupValidationYAMLPath: string) {
@@ -69,6 +70,11 @@ class ProjectSetupWithYAML {
         return safeEnv
     }
 
+    setCustomReporter(reporter: Function) {
+        this.config.customReporter = reporter
+        return this
+    }
+
     setCustomVariable(customVariableName: CustomVariablesYAMLTypes, value: string): ProjectSetupWithYAML
     setCustomVariable(customVariableName: string, value: string): ProjectSetupWithYAML
     setCustomVariable(customVariableName: string | CustomVariablesYAMLTypes, value: string): ProjectSetupWithYAML {
@@ -87,7 +93,14 @@ class ProjectSetupWithYAML {
             environmentToValidate[name] = this.getValidatorFromType(type)()
         }
 
-        const safeEnv = validateProjectEnvironment(process.env, environmentToValidate)
+        let options: any = undefined
+        if (this.config.customReporter) {
+            options = {
+                reporter: this.config.customReporter
+            }
+        }
+
+        const safeEnv = validateProjectEnvironment(process.env, environmentToValidate, options)
 
         // Validate Dirs and files
         const directorySetup: DirFileObject = {
@@ -116,7 +129,7 @@ class ProjectSetupWithYAML {
             })
         }
 
-        validateProjectDirectories(directorySetup)
+        validateProjectDirectories(directorySetup, this.config.customReporter)
 
         return safeEnv
     }
