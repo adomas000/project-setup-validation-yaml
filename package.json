@@ -4,7 +4,7 @@
   "description": "Validate environment variables, files and directories. Supports YAML configuration",
   "main": "./dist/index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "test": "mocha --require ts-node/register --require tsconfig-paths/register test/**/*.spec.ts",
     "copyYAMLFiles": "copyfiles -u 1 'src/schemas/*.yaml' dist",
     "build": "tsc && npm run copyYAMLFiles",
     "start": "npm run build && node ./dist/index.js",
@@ -21,8 +21,18 @@
   },
   "homepage": "https://github.com/adomas000/project-setup-validation-yaml#readme",
   "devDependencies": {
+    "@types/chai": "^4.3.5",
+    "@types/mocha": "^10.0.1",
+    "@types/mock-fs": "^4.13.1",
     "@types/node": "^20.2.3",
+    "@types/sinon": "^10.0.15",
+    "chai": "^4.3.7",
     "copyfiles": "^2.4.1",
+    "mocha": "^10.2.0",
+    "mock-fs": "^5.2.0",
+    "sinon": "^15.1.0",
+    "ts-node": "^10.9.1",
+    "tsconfig-paths": "^4.2.0",
     "typescript": "^5.0.4"
   },
   "dependencies": {
