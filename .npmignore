@@ -1,0 +1,9 @@
+src/main.ts
+.github
+project-setup-validation.yaml
+
+src
+test
+node_modules
+tsconfig.json
+.gitignore
