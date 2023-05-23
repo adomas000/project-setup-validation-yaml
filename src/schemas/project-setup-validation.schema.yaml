@@ -1,0 +1,51 @@
+$schema: http://json-schema.org/draft-07/schema#
+type: object
+properties:
+  config:
+    type: object
+    properties:
+      baseDir:
+        type: string
+  environment:
+    type: array
+    items:
+      type: object
+      properties:
+        name:
+          type: string
+        type:
+          type: string
+          enum: ["str", "bool", "num", "email", "host", "port", "url", "json", "base64Json", "base64String"]
+      required:
+        - name
+        - type
+  files:
+    type: array
+    items:
+      type: object
+      properties:
+        path:
+          type: string
+        ensureExists:
+          type: boolean
+        baseDir:
+          type: string
+      required:
+        - path
+  dirs:
+    type: array
+    items:
+      type: object
+      properties:
+        path:
+          type: string
+        ensureExists:
+          type: boolean
+        baseDir:
+          type: string
+      required:
+        - path
+required:
+  - environment
+  - files
+  - dirs

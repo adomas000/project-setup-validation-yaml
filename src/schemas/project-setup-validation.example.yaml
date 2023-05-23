@@ -1,0 +1,14 @@
+config:
+  baseDir: "%CWD%"
+environment:
+  - name: "EXAMPLE_ENV"
+    type: "str"
+files:
+  - path: "/src/index.js"
+    ensureExists: false
+    baseDir: "%CWD%"
+dirs:
+  - path: "/node_modules"
+
+# Custom variables
+#  %CWD% will be replaced with current cwd that the program starts with or can be passed as argument
