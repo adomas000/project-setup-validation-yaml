@@ -1,6 +1,6 @@
 {
   "name": "project-setup-validation-yaml",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "description": "Validate environment variables, files and directories. Supports YAML configuration",
   "main": "./dist/index.js",
   "scripts": {
