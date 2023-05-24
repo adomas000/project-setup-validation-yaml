@@ -93,14 +93,14 @@ export function validateProjectDirectories(obj: DirFileObject, reporter?: Functi
 
   if (errors.dirs.length) {
     if (reporterType === 'console') {
-      reporter('"""""""""""""""""""""""""""""""""""""""""""""""""""""""')
+      reporter!('"""""""""""""""""""""""""""""""""""""""""""""""""""""""')
       errors.dirs.forEach((o) => {
         reporter!(o.error)
       })
-      reporter('"""""""""""""""""""""""""""""""""""""""""""""""""""""""')
+      reporter!('"""""""""""""""""""""""""""""""""""""""""""""""""""""""')
       process.exit(1);
     } else {
-      reporter(errors.dirs)
+      reporter!(errors.dirs)
     }
     return // early return, because some file paths might depend on dirs
   }
@@ -139,14 +139,14 @@ export function validateProjectDirectories(obj: DirFileObject, reporter?: Functi
 
     if (errors.files.length) {
       if (reporterType === 'console') {
-        reporter('"""""""""""""""""""""""""""""""""""""""""""""""""""""""')
+        reporter!('"""""""""""""""""""""""""""""""""""""""""""""""""""""""')
         errors.files.forEach((o) => {
           reporter!(o.error)
         })
-        reporter('"""""""""""""""""""""""""""""""""""""""""""""""""""""""')
+        reporter!('"""""""""""""""""""""""""""""""""""""""""""""""""""""""')
         process.exit(1);
       } else {
-        reporter(errors.files)
+        reporter!(errors.files)
       }
     }
   }
