@@ -1,5 +1,51 @@
 ## How to use
 
+#### Minimal setup
+
+```yaml
+# ./project-setup-validation.yaml
+
+environment:
+  - name: "TEST"
+    type: "str"
+  - name: "my_email"
+    type: "email"
+```
+
+```js
+// ./index.ts
+import projectSetupWithYAML from "project-setup-validation-yaml";
+
+const safeEnv = projectSetupWithYAML("./project-setup-validation.yaml").validate()
+
+console.log(safeEnv.TEST) 
+console.log(safeEnv.my_email)
+    
+```
+
+#### Example of failed validation
+```yaml
+environment:
+  - name: "NON_EXISTING"
+    type: "str"
+  - name: "SLACK_ERROR_HOOK_BASE64"
+    type: "url"
+```
+
+```c#
+// This will be outputed to console
+================================
+ Invalid environment variables:
+    SLACK_ERROR_HOOK_BASE64: Invalid url: "af830sf02fnAFNnfuaeoJFNAufneN=="
+ Missing environment variables:
+    NON_EXISTING: undefined
+================================
+
+ Exiting with error code 1
+
+```
+
+#### Full example
 ```js
 /** Import package */
 import projectSetupWithYAML from "project-setup-validation-yaml";
@@ -26,7 +72,7 @@ const safeEnv = pswy.validate()
 
 ```
 
-#### You can also chain these operations for aesthetic look
+#### You can also chain these operations
 
 ```js
 /**
@@ -44,9 +90,10 @@ const safeEnv = projectSetupWithYAML("./project-setup-validation.yaml")
 
 ```
 
+
 ## YAML configuration/ project setup validation example/ schema
 
-### Simple example of project setup validation YAML
+##### Simple example of project setup validation YAML
 
 ```yaml
 config:
@@ -62,7 +109,8 @@ dirs:
   - path: "/node_modules"
 ```
 
-### Full example of project setup validation YAML
+
+##### Full example of project setup validation YAML
 
 ```yaml
 
@@ -120,7 +168,7 @@ dirs:
 #  %CWD% will be replaced with current cwd that the program starts with or can be passed as argument
 ```
 
-### Shema that is used to validate project setup YAML
+#### Shema that is used to validate project setup YAML
 
 ```yaml
 
