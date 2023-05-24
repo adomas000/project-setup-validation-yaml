@@ -91,24 +91,7 @@ const safeEnv = projectSetupWithYAML("./project-setup-validation.yaml")
 ```
 
 
-## YAML configuration/ project setup validation example/ schema
-
-##### Simple example of project setup validation YAML
-
-```yaml
-config:
-  baseDir: "%CWD%"
-environment:
-  - name: "EXAMPLE_ENV"
-    type: "str"
-files:
-  - path: "/src/index.js"
-    ensureExists: false
-    baseDir: "%MY_VAR%"
-dirs:
-  - path: "/node_modules"
-```
-
+## Full YAML configuration & Schema
 
 ##### Full example of project setup validation YAML
 
