@@ -1,5 +1,12 @@
 ## How to use
 
+#### Install
+
+```shell
+
+npm i project-setup-validation-yaml
+```
+
 #### Minimal setup
 
 ```yaml
@@ -16,7 +23,8 @@ environment:
 // ./index.ts
 import projectSetupWithYAML from "project-setup-validation-yaml";
 
-const safeEnv = projectSetupWithYAML("./project-setup-validation.yaml").validate()
+const safeEnv = projectSetupWithYAML("./project-setup-validation.yaml")
+    .validate() // Readonly<any>
 
 console.log(safeEnv.TEST) 
 console.log(safeEnv.my_email)
@@ -54,16 +62,7 @@ type safeEnvType = type safeEnvType = {
 }
 
 const safeEnv = projectSetupWithYAML("./project-setup-validation.yaml")
-    .validate<safeEnvType>()
-
-console.log(safeEnv.NODE_ENV) // works
-console.log(safeEnv.IDONTEXIST) // error{
-    NODE_ENV: string,
-    TEST: string,
-}
-
-const safeEnv = projectSetupWithYAML("./project-setup-validation.yaml")
-    .validate<safeEnvType>()
+    .validate<safeEnvType>() // Readonly<safeEnvType>
 
 console.log(safeEnv.NODE_ENV) // works
 console.log(safeEnv.IDONTEXIST) // error
@@ -76,49 +75,30 @@ console.log(safeEnv.IDONTEXIST) // error
 import projectSetupWithYAML from "project-setup-validation-yaml";
 
 /** Initialise with relative or absolute path that links to your YAML configuration */
-const pswy = projectSetupWithYAML("./project-setup-validation.yaml")
-/**
- * [Optional] Replaces variables set in YAML project configuration
- * In this example, %ENV% in YAML file will be replaced with 'PRD'
-*/
-pswy.setCustomVariable("ENV", "PRD")
-/**
- * [Optional] By default package will log encountered errors to console and exit process
- * But setting reporter will override this behaviour and redirect errors to passed function
-*/
-pswy.setCustomReporter((errors) => {
-    console.error(errors.map(e => e.error).join("\n"))
-})
-/**
- * validate() is the main method that invokes validation for everything we set up so far
- * validate method returns safeEnvironment object that will contain environment variables that we just validated
-*/
-const safeEnv = pswy.validate()
-
-```
-
-#### You can also chain these operations
-
-```typescript
-/**
- * Every public method except 'validate()' will return same instance
- * This allows us to chain the methods like this
- */
-
 const safeEnv = projectSetupWithYAML("./project-setup-validation.yaml")
+    /**
+     * [Optional] Replaces variables set in YAML project configuration
+     * In this example, %ENV% in YAML file will be replaced with 'PRD'
+    */
+    .setCustomVariable("ENV", "PRD")
+    /**
+     * [Optional] By default package will log encountered errors to console and exit process
+     * But setting reporter will override this behaviour and redirect errors to passed function
+    */
     .setCustomReporter((errors) => {
         console.error(errors.map(e => e.error).join("\n"))
     })
-    .setCustomVariable("MY_VAR", "/test")
-    .setCustomVariable("CWD", "will replace process.cwd() with our value here")
+    /**
+     * validate() is the main method that invokes validation for everything we set up so far
+     * validate method returns safeEnvironment object that will contain environment variables that we just validated
+    */
     .validate()
 
 ```
-
-
+<br>
 ## Full YAML configuration & Schema
 
-##### Full example of project setup validation YAML
+#### Full example of project setup validation YAML
 
 ```yaml
 
