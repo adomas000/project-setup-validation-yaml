@@ -12,7 +12,7 @@ environment:
     type: "email"
 ```
 
-```js
+```typescript
 // ./index.ts
 import projectSetupWithYAML from "project-setup-validation-yaml";
 
@@ -45,8 +45,33 @@ environment:
 
 ```
 
+#### Setting validated environment type for TypeScript
+
+```typescript
+type safeEnvType = type safeEnvType = {
+    NODE_ENV: string,
+    TEST: string,
+}
+
+const safeEnv = projectSetupWithYAML("./project-setup-validation.yaml")
+    .validate<safeEnvType>()
+
+console.log(safeEnv.NODE_ENV) // works
+console.log(safeEnv.IDONTEXIST) // error{
+    NODE_ENV: string,
+    TEST: string,
+}
+
+const safeEnv = projectSetupWithYAML("./project-setup-validation.yaml")
+    .validate<safeEnvType>()
+
+console.log(safeEnv.NODE_ENV) // works
+console.log(safeEnv.IDONTEXIST) // error
+
+```
+
 #### Full example
-```js
+```typescript
 /** Import package */
 import projectSetupWithYAML from "project-setup-validation-yaml";
 
@@ -74,7 +99,7 @@ const safeEnv = pswy.validate()
 
 #### You can also chain these operations
 
-```js
+```typescript
 /**
  * Every public method except 'validate()' will return same instance
  * This allows us to chain the methods like this

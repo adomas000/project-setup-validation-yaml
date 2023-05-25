@@ -62,12 +62,12 @@ class ProjectSetupWithYAML {
         this.loadYAMLConfiguration(this.config.projectSetupValidationYAMLPath)
     }
 
-    validate() {
+    validate<T = any>(): Readonly<T> {
         this.setDefaultVariablesValues()
         this.validateYAMLProjectSetupAgainstSchema()
         const safeEnv = this.validateProjectSetup()
  
-        return safeEnv
+        return safeEnv as Readonly<T>
     }
 
     setCustomReporter(reporter: Function) {
