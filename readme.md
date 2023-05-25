@@ -95,7 +95,8 @@ const safeEnv = projectSetupWithYAML("./project-setup-validation.yaml")
     .validate()
 
 ```
-<br>
+<br/>
+
 ## Full YAML configuration & Schema
 
 #### Full example of project setup validation YAML
